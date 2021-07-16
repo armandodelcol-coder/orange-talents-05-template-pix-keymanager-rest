@@ -9,7 +9,7 @@ import javax.inject.Singleton
 @Factory
 class PixManagerClientFactory {
     @Singleton
-    fun pixManagerClientStub(@GrpcChannel("pixManager") channel: ManagedChannel): PixKeyManagerRegistrarServiceGrpc.PixKeyManagerRegistrarServiceBlockingStub {
+    fun pixManagerClientRegistrarStub(@GrpcChannel("pixManager") channel: ManagedChannel): PixKeyManagerRegistrarServiceGrpc.PixKeyManagerRegistrarServiceBlockingStub {
         return PixKeyManagerRegistrarServiceGrpc.newBlockingStub(channel)
     }
 }

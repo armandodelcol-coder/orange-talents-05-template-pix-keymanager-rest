@@ -22,12 +22,12 @@ enum class KeyType {
     }, CELULAR {
         override fun validate(key: String?) {
             if (key.isNullOrBlank() || !key.matches("^\\+[1-9][0-9]\\d{1,14}\$".toRegex())) {
-                throw CustomBadRequestException("chave é obrigatória e formato esperado deve ser +5585988714077")
+                throw CustomBadRequestException("key é obrigatória e formato esperado deve ser +5585988714077")
             }
         }
     }, RANDOMICA {
         override fun validate(key: String?) {
-            if (!key.isNullOrBlank()) throw CustomBadRequestException("Para tipo chave RANDOMICA não deve ser informada uma chave.")
+            if (!key.isNullOrBlank()) throw CustomBadRequestException("Para keyType RANDOMICA não deve ser informada uma key.")
         }
     };
 

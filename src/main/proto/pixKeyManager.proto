@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "br.com.zupedu.armando";
+option java_outer_classname = "PixKeyManager";
+option objc_class_prefix = "HLW";
+
+package br.com.zupedu.armando;
+
+import "google/protobuf/timestamp.proto";
+
+service PixKeyManagerRegistrarService {
+  rpc registrar (RegistrarPixRequest) returns (RegistrarPixResponse) {}
+}
+
+service PixKeyManagerRemoverService {
+  rpc remover (RemoverPixRequest) returns (RemoverPixResponse) {}
+}
+
+service PixKeyManagerBuscarService {
+  rpc buscar (BuscarChavePixRequest) returns (BuscarChavePixResponse) {}
+}
+
+service PixKeyManagerListarService {
+  rpc listar (ListarPixRequest) returns (ListarPixResponse) {}
+}
+
+enum TipoChave {
+  CHAVE_DESCONHECIDA = 0;
+  CPF = 1;
+  CELULAR = 2;
+  EMAIL = 3;
+  RANDOMICA = 4;
+}
+
+enum TipoConta {
+  CONTA_DESCONHECIDA = 0;
+  CONTA_CORRENTE = 1;
+  CONTA_POUPANCA = 2;
+}
+
+message RegistrarPixRequest {
+  string clienteId = 1;
+  TipoChave tipoChave = 2;
+  string chave = 3;
+  TipoConta tipoConta = 4;
+}
+
+message RegistrarPixResponse {
+  string pixId = 1;
+}
+
+message RemoverPixRequest {
+  string pixId = 1;
+  string clienteId = 2;
+}
+
+message RemoverPixResponse {
+  string info = 1;
+}
+
+message BuscarChavePixRequest {
+  string clienteId = 1;
+  string pixId = 2;
+  string chave = 3;
+}
+
+message BuscarChavePixResponse {
+  message ChavePix {
+    message Conta {
+      TipoConta tipoConta = 1;
+      string instituicaoNome = 2;
+      string instituicaoIspb = 3;
+      string titularNome = 4;
+      string titularCpf = 5;
+      string agencia = 6;
+      string numero = 7;
+    }
+
+    TipoChave tipoChave = 1;
+    string chave = 2;
+    Conta conta = 3;
+    google.protobuf.Timestamp criadaEm = 4;
+  }
+
+  string pixId = 1;
+  string clienteId = 2;
+  ChavePix chavePix = 3;
+}
+
+message ListarPixRequest {
+  string clienteId = 1;
+}
+
+message ListarPixResponse {
+  message ChavePixListagemResponse {
+    string pixId = 1;
+    string clienteId = 2;
+    TipoChave tipoChave = 3;
+    string chave = 4;
+    TipoConta tipoConta = 5;
+    string criadaEm = 6;
+  }
+
+  repeated ChavePixListagemResponse chaves = 1;
+}

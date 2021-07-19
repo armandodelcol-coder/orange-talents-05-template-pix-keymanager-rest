@@ -25,7 +25,7 @@ class ValidAccountTypeValidator: ConstraintValidator<ValidAccountType, String> {
         if (value.isNullOrBlank()) return true
 
         val validValues = AccountType.values().map { keyType -> keyType.name }
-        context.messageTemplate("accountType inválido. Valores válidos: $validValues")
+        context.messageTemplate("Valores válidos: $validValues")
 
         if (validValues.contains(value)) return true
 

@@ -1,5 +1,6 @@
 package br.com.zup.academy.armando.pix.controllers
 
+import br.com.zup.academy.armando.core.dispatchers.GrpcExceptionDispatcher
 import br.com.zup.academy.armando.core.handler.CustomErrorHandler
 import br.com.zup.academy.armando.core.handler.exceptions.CustomGrpcResponseException
 import br.com.zup.academy.armando.pix.dtos.NewPixKeyRequest
@@ -44,7 +45,11 @@ class NewPixKeyController(
             logger.info("Problemas na requisição GRPC")
             logger.info("Status retornado do servidor GRPC: $statusCode")
             logger.info("Mensagem retornada do servidor GRPC: $description")
+            GrpcExceptionDispatcher.call(e)
             throw CustomGrpcResponseException(description ?: "Erro inesperado, contate o desenvolvedor.")
         }
     }
+
+    // PODERIA TRATAR O UnsatisfiedBodyRouteException
+    // para uma mensagem mais amigável quando não informar algum campo necessário no Body.
 }

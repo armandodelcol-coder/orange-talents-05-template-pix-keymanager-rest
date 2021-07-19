@@ -2,6 +2,9 @@ package br.com.zup.academy.armando.core.handler
 
 import br.com.zup.academy.armando.core.handler.exceptions.CustomBadRequestException
 import br.com.zup.academy.armando.core.handler.exceptions.CustomGrpcResponseException
+import br.com.zup.academy.armando.core.handler.exceptions.GrpcNotFoundException
+import br.com.zup.academy.armando.core.handler.exceptions.GrpcUnavailableException
+import br.com.zup.academy.armando.core.handler.helpers.MakerConstraintViolation
 import io.micronaut.aop.InterceptorBean
 import io.micronaut.aop.MethodInterceptor
 import io.micronaut.aop.MethodInvocationContext
@@ -23,14 +26,7 @@ class CustomErrorHandlerInterceptor: MethodInterceptor<Any, Any> {
         } catch (ex: Exception) {
             when(ex) {
                 is ConstraintViolationException -> {
-                    val fieldMessages = ex.constraintViolations.map { constraint -> CustomErrorDetail(description = constraint.message) }
-
-                    return HttpResponse.badRequest(CustomErrorBody(
-                        HttpStatus.BAD_REQUEST.code,
-                        name = HttpStatus.BAD_REQUEST.name,
-                        description = "Alguns campos foram preenchidos indevidamente. Por favor verifique e tente novamente.",
-                        details = fieldMessages
-                    ))
+                    return MakerConstraintViolation.responseBody(ex)
                 }
                 is CustomBadRequestException -> {
                     return HttpResponse.badRequest(CustomErrorBody(
@@ -49,6 +45,22 @@ class CustomErrorHandlerInterceptor: MethodInterceptor<Any, Any> {
                             details = listOf(CustomErrorDetail(description = ex.message))
                         )
                     )
+                }
+                is GrpcUnavailableException -> {
+                    return HttpResponse.serverError(CustomErrorBody(
+                        statusCode = HttpStatus.INTERNAL_SERVER_ERROR.code,
+                        name = HttpStatus.INTERNAL_SERVER_ERROR.name,
+                        description = ex.message,
+                        details = null
+                    ))
+                }
+                is GrpcNotFoundException -> {
+                    return HttpResponse.notFound(CustomErrorBody(
+                        statusCode = HttpStatus.NOT_FOUND.code,
+                        name = HttpStatus.NOT_FOUND.name,
+                        description = ex.message,
+                        details = null
+                    ))
                 }
                 else -> {
                     logger.info("ERRO INESPERADO")

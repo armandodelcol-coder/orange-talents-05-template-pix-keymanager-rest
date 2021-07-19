@@ -1,6 +1,7 @@
 package br.com.zup.academy.armando.grpc
 
 import br.com.zupedu.armando.PixKeyManagerRegistrarServiceGrpc
+import br.com.zupedu.armando.PixKeyManagerRemoverServiceGrpc
 import io.grpc.ManagedChannel
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
@@ -11,5 +12,10 @@ class PixManagerClientFactory {
     @Singleton
     fun pixManagerClientRegistrarStub(@GrpcChannel("pixManager") channel: ManagedChannel): PixKeyManagerRegistrarServiceGrpc.PixKeyManagerRegistrarServiceBlockingStub {
         return PixKeyManagerRegistrarServiceGrpc.newBlockingStub(channel)
+    }
+
+    @Singleton
+    fun pixManagerClientRemoverStub(@GrpcChannel("pixManager") channel: ManagedChannel): PixKeyManagerRemoverServiceGrpc.PixKeyManagerRemoverServiceBlockingStub {
+        return PixKeyManagerRemoverServiceGrpc.newBlockingStub(channel)
     }
 }

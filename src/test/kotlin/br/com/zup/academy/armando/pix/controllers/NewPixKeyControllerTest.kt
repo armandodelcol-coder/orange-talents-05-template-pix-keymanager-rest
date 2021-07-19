@@ -58,7 +58,7 @@ internal class NewPixKeyControllerTest(
         with (response) {
             assertEquals(HttpStatus.BAD_REQUEST.code, status.code)
             assertTrue(response.body() is CustomErrorBody)
-            assertEquals("não é um formato válido de UUID", (response.body() as CustomErrorBody).details!![0].description)
+            assertEquals("clientId inválido. não é um formato válido de UUID", (response.body() as CustomErrorBody).details!![0].description)
         }
     }
 
@@ -207,6 +207,25 @@ internal class NewPixKeyControllerTest(
             assertEquals(
                 "Dummy Description",
                 (response.body() as CustomErrorBody).details!![0].description
+            )
+        }
+    }
+
+    @Test
+    fun `deve retornar um erro quando servidor Grpc estiver indisponível`() {
+        // scenario
+        val request = dummyGoodRequestDto
+        val dummyResponseErrorGrpc = StatusRuntimeException(Status.UNAVAILABLE)
+        Mockito.`when`(grpcClient.registrar(request.toGrpcRequest())).thenThrow(dummyResponseErrorGrpc)
+        // action
+        val response = newPixKeyController.register(request)
+        // verification
+        with (response) {
+            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.code, status.code)
+            assertTrue(response.body() is CustomErrorBody)
+            assertEquals(
+                "Servidor GRPC indisponível",
+                (response.body() as CustomErrorBody).description
             )
         }
     }

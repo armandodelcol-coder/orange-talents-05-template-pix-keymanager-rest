@@ -12,4 +12,7 @@
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
+
+    <!--É um logger bastante extenso mas ajuda a identificar erros para tratar-->
+    <!--<logger name="io.micronaut.context" level="DEBUG"/>-->
 </configuration>

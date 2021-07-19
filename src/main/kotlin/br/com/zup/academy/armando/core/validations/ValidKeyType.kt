@@ -25,7 +25,7 @@ class ValidKeyTypeValidator: ConstraintValidator<ValidKeyType, String> {
         if (value.isNullOrBlank()) return true
 
         val validValues = KeyType.values().map { keyType -> keyType.name }
-        context.messageTemplate("keyType inválido. Valores válidos: $validValues")
+        context.messageTemplate("Valores válidos: $validValues")
 
         if (validValues.contains(value)) return true
 

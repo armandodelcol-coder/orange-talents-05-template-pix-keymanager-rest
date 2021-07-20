@@ -1,6 +1,7 @@
 package br.com.zup.academy.armando.grpc
 
 import br.com.zupedu.armando.PixKeyManagerBuscarServiceGrpc
+import br.com.zupedu.armando.PixKeyManagerListarServiceGrpc
 import br.com.zupedu.armando.PixKeyManagerRegistrarServiceGrpc
 import br.com.zupedu.armando.PixKeyManagerRemoverServiceGrpc
 import io.grpc.ManagedChannel
@@ -23,5 +24,10 @@ class PixManagerClientFactory {
     @Singleton
     fun pixManagerClientBuscarStub(@GrpcChannel("pixManager") channel: ManagedChannel): PixKeyManagerBuscarServiceGrpc.PixKeyManagerBuscarServiceBlockingStub {
         return PixKeyManagerBuscarServiceGrpc.newBlockingStub(channel)
+    }
+
+    @Singleton
+    fun pixManagerClientListarStub(@GrpcChannel("pixManager") channel: ManagedChannel): PixKeyManagerListarServiceGrpc.PixKeyManagerListarServiceBlockingStub {
+        return PixKeyManagerListarServiceGrpc.newBlockingStub(channel)
     }
 }
